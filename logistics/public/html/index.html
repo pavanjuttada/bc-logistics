@@ -1,0 +1,136 @@
+<!-- index.html -->
+<!doctype html>
+
+<!-- ASSIGN OUR ANGULAR MODULE -->
+<html ng-app="logisticsApp">
+<head>
+    <!-- META -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Optimize mobile viewport -->
+
+    <title>Logistics App</title>
+
+    <!-- SCROLLS -->
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css"><!-- load bootstrap -->
+    <style>
+        html                    { overflow-y:scroll; }
+        body                    { padding-top:20px; }
+        #todo-list              { margin-bottom:20px; }
+    </style>
+
+    <!-- SPELLS -->
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script><!-- load jquery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.0.8/angular.min.js"></script><!-- load angular -->
+    <script src="/js/core.js"></script>
+
+</head>
+<!-- SET THE CONTROLLER AND GET ALL TODOS -->
+<body ng-controller="mainController" data-ng-init="init()">
+    <div class="container">
+
+        <!-- HEADER AND TODO COUNT -->
+        <div class="box box-info">
+            <div class="box-header text-center">
+                <h3>Blockchain For Logistics</h3>
+                
+                <div class="col-md-offset-8 box-info col-md-3">
+                    <span class="box-title">Login As</span>
+                    <select ng-change="init()" ng-model="user_id" value="111" class="form-control">
+                     <option ng-repeat="user in users" value="{{user.id}}">{{user.name}}</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <div class="box box-info col-md-9">
+            <div class="box-header with-border">
+              <h3 class="box-title">Shipments <span class="label label-info">{{ todos.length }}</span></h3>
+
+              
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body">
+              <div class="table-responsive">
+                <table class="table no-margin">
+                  <thead>
+                  <tr>
+                    <th>Shipment</th>
+                    <th>Seller</th>
+                    <th>Seller Location</th>
+                    <th>Buyer</th>
+                    <th>Buyer Location</th>
+                    <th>Logistic Provider</th>
+                    <th>Status</th>
+                  </tr>
+                  </thead>
+
+                  <tbody ng-repeat="todo in todos">
+                      <tr>
+                        <td><a href="#">{{todo.Record.shipment_name}}</a></td>
+                        <td>{{todo.Record.seller_name}}</td>
+                        <td>{{todo.Record.seller_location}}</td>
+                        <td>{{todo.Record.buyer_name}}</td>
+                        <td>{{todo.Record.buyer_location}}</td>
+                        <td>{{todo.Record.logistic_provider_id}}</td>
+                        <td>
+                            <span ng-show="todo.Record.status!='accepted' && todo.Record.status!='rejected'" class="label label-primary">{{todo.Record.status}}</span>
+                            <span ng-show="todo.Record.status=='accepted'" class="label label-success">{{todo.Record.status}}</span>
+                            <span ng-show="todo.Record.status=='rejected'" class="label label-danger">{{todo.Record.status}}</span>
+                        </td>
+                        <td>
+                            <input ng-show="todo.Record.status=='store' && user_id==111" type="button" class="btn btn-primary"  ng-click="changeStatus(todo.Record.id,'intransit')" value="Send to Shiping"> 
+                            <input ng-show="todo.Record.status=='intransit' && user_id==333" type="button" class="btn btn-primary"  ng-click="changeStatus(todo.Record.id,'delivered')" value="Delever"> 
+                            <input ng-show="todo.Record.status=='delivered' && user_id==222" type="button" class="btn btn-success"  ng-click="changeStatus(todo.Record.id,'accepted')" value="Accept">
+                            <input ng-show="todo.Record.status=='delivered' && user_id==222" type="button" class="btn btn-danger"  ng-click="changeStatus(todo.Record.id,'rejected')" value="Reject">
+                        </td>
+                      </tr>
+                  
+                  </tbody>
+                </table>
+              </div>
+              <!-- /.table-responsive -->
+            </div>
+            <!-- /.box-body -->
+            
+            <!-- /.box-footer -->
+          </div>
+
+
+        <div id="create-shipment-form" ng-show="user_id!=333"  class="box box-primary col-md-3">
+            <div class="box-header with-border">
+              <h3 class="box-title">Add Shipment</h3>
+            </div>
+            <!-- /.box-header -->
+            <!-- form start -->
+            <form role="form">
+              <div class="box-body">
+                <div class="form-group">
+                  <label for="shipmentName">Shimpment</label>
+                  <input type="text" class="form-control" id="shipmentName" ng-model="formData.Shipment_Name" placeholder="Shimpment9">
+                </div>
+                <div class="form-group">
+                  <label for="buyerID">BuyerId</label>
+                  <input type="text" class="form-control" id="buyerID" ng-model="formData.BuyerId" placeholder="222">
+                </div>
+                <div class="form-group">
+                  <label for="buyerName">BuyerName</label>
+                  <input type="text" class="form-control" id="buyerName" ng-model="formData.BuyerName" placeholder="Santosh">
+                </div>
+                <div class="form-group">
+                  <label for="buyerLocation">BuyerLocation</label>
+                  <input type="text" class="form-control" id="buyerLocation" ng-model="formData.BuyerLocation" placeholder="Delhi">
+                </div>
+                <div class="form-group">
+                  <label for="lp">Logistic Provider</label>
+                  <input type="text" class="form-control" id="lp" ng-model="formData.Logisticprovider" placeholder="333">
+                </div>
+              </div>
+              <!-- /.box-body -->
+              <div class="box-footer">
+                <button type="submit" class="btn btn-primary" ng-click="createTodo()">Create Shipment</button>
+              </div>
+            </form>
+          </div>
+    </div>
+</body>
+</html>
